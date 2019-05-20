@@ -1,0 +1,31 @@
+name: Semi-Hardcore
+main: dk.fido2603.semihardcore.SemiHardcore
+author: Fido2603
+version: ${project.version}
+api-version: 1.14
+load: POSTWORLD
+description: Die and you're banned!
+depend: []
+softdepend: [Vault]
+website: https://github.com/Fido2603/Semi-Hardcore
+commands:
+   semihardcore:
+      description: Command for the Semi-Hardcore plugin
+      usage: /<command> [reload|save]
+      aliases: [sh]
+permissions:
+    semihardcore.*:
+        description: Gives access to all Semi-Hardcore commands
+        children:
+            semihardcore.reload: true
+            semihardcore.save: true
+            semihardcore.exempt: true
+    semihardcore.reload:
+        description: Player can reload the Semi-Hardcore configs
+        default: false
+    semihardcore.save:
+        description: Player can save the Semi-Hardcore configs
+        default: false
+    semihardcore.exempt:
+        description: Player doesn't get temp-banned
+        default: false

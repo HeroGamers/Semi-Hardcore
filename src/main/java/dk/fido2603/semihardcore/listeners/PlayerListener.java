@@ -1,0 +1,45 @@
+package dk.fido2603.semihardcore.listeners;
+
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import dk.fido2603.semihardcore.SemiHardcore;
+
+public class PlayerListener implements Listener
+{
+	private SemiHardcore	plugin	= null;
+
+	public PlayerListener(SemiHardcore plugin)
+	{
+		this.plugin = plugin;
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		if (!SemiHardcore.pluginEnabled)
+		{
+			return;
+		}
+		if (!event.getPlayer().isOp() || (!SemiHardcore.getPermissionsManager().hasPermission(event.getPlayer(), "semihardcore.exempt"))) {
+			plugin.logDebug("No op or exempt, checking player");
+			SemiHardcore.getPlayerManager().newPlayerCheck(event.getPlayer());
+			return;
+		}
+		plugin.logDebug("Player had op or exempt...");
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerDeath(PlayerDeathEvent event)
+	{
+		if (!event.getEntity().isOp() || (!SemiHardcore.getPermissionsManager().hasPermission(event.getEntity(), "semihardcore.exempt"))) {
+			plugin.logDebug("No op or exempt, banning player");
+			SemiHardcore.getPlayerManager().banPlayer(event.getEntity(), event.getEntity().getUniqueId());
+			return;
+		}
+		plugin.logDebug("Player had op or exempt...");
+	}
+}
