@@ -48,7 +48,6 @@ public class Commands implements Listener
 			String unbanPlayer = args[1];
 			SemiHardcore.getPlayerManager().unbanPlayer(player, unbanPlayer);
 		}
-		return;
 	}
 	
 	private boolean commandHelp(CommandSender sender)

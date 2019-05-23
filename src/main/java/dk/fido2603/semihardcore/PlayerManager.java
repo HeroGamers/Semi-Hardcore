@@ -78,11 +78,9 @@ public class PlayerManager
 			if (entry.getValue() instanceof String) {
 				this.plugin.logDebug("Entry key: " + entry.getKey());
 				this.plugin.logDebug("Entry value: " + entry.getValue());
-				if (entry.getKey().contains(".Name")) {
-					if (entry.getValue().toString().equalsIgnoreCase(bannedPlayer)) {
-						unbanPlayerId = UUID.fromString(entry.getKey().replace(".Name", ""));
-						break;
-					}
+				if (entry.getKey().contains(".Name") && entry.getValue().toString().equalsIgnoreCase(bannedPlayer)) {
+					unbanPlayerId = UUID.fromString(entry.getKey().replace(".Name", ""));
+					break;
 				}
 		    }
 		}

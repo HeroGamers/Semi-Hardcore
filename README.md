@@ -9,11 +9,11 @@ Semi-Hardcore
 If you die, you're out of the game for a certain amount of time. Perfect for servers not wanting to go all out on Hardcore, but still want the players to not go around thinking they can just respawn, because that's not how real Minecrafters play...
 
 **Plugin Features:**
-*  Temp-ban of player for a configurable time, in hours
-*  Unban command
-*  Permission to be exempted from the bans
-*  A very inactive developer, hehe
-*  Open-source
+*   Temp-ban of player for a configurable time, in hours
+*   Unban command
+*   Permission to be exempted from the bans
+*   A very inactive developer, hehe
+*   Open-source
 
 **Resources:**
 [Spigot Resource](https://www.spigotmc.org/resources/semi-hardcore.67618/)
