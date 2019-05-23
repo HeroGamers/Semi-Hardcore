@@ -42,6 +42,48 @@ public class Commands implements Listener
 			player.sendMessage(ChatColor.YELLOW + this.plugin.getDescription().getFullName() + ": " + ChatColor.WHITE + "Saved configuration(s).");
 		}
 	}
+	
+	public void commandUnban(Player player, String[] args) {
+		if (player == null || player.isOp() || SemiHardcore.getPermissionsManager().hasPermission(player, "semihardcore.save")) {
+			String unbanPlayer = args[1];
+			SemiHardcore.getPlayerManager().unbanPlayer(player, unbanPlayer);
+		}
+		return;
+	}
+	
+	private boolean commandHelp(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.YELLOW + "---------------- " + plugin.getDescription().getFullName() + " ----------------");
+		sender.sendMessage(ChatColor.AQUA + "Made by Fido2603");
+		sender.sendMessage(ChatColor.AQUA + "");
+		sender.sendMessage(ChatColor.AQUA + "Use " + ChatColor.WHITE + "/semihardcore help" + ChatColor.AQUA + ", to get a list of available commands.");
+
+		return true;
+	}
+
+	private boolean commandList(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.YELLOW + "---------------- " + this.plugin.getDescription().getFullName() + " ----------------");
+		sender.sendMessage(ChatColor.AQUA + "/semihardcore" + ChatColor.WHITE + " - Info about the plugin");
+		if ((sender.isOp()) || (sender.hasPermission("semihardcore.help")))
+		{
+			sender.sendMessage(ChatColor.AQUA + "/semihardcore help" + ChatColor.WHITE + " - Shows this message");
+		}
+		if ((sender.isOp()) || (sender.hasPermission("semihardcore.unban")))
+		{
+			sender.sendMessage(ChatColor.AQUA + "/semihardcore unban <player>" + ChatColor.WHITE + " - Unbans a player from the server, if the cause of the ban is death");
+		}
+		if ((sender.isOp()) || (sender.hasPermission("semihardcore.reload")))
+		{
+			sender.sendMessage(ChatColor.AQUA + "/semihardcore reload" + ChatColor.WHITE + " - Reloads configs from disk");
+		}
+		if ((sender.isOp()) || (sender.hasPermission("semihardcore.save")))
+		{
+			sender.sendMessage(ChatColor.AQUA + "/semihardcore save" + ChatColor.WHITE + " - Saves modified configs to disk");
+		}
+
+		return true;
+	}
 
 	// What happens when a command is run?
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -54,7 +96,11 @@ public class Commands implements Listener
 		
 		if ((label.equalsIgnoreCase("semihardcore")) || (label.equalsIgnoreCase("sh")))
 		{
-			if (args.length == 1)
+			if (args.length == 0) {
+				commandHelp(player);
+				return true;
+			}
+			else if (args.length == 1)
 			{
 				if (args[0].equalsIgnoreCase("reload"))
 				{
@@ -64,9 +110,16 @@ public class Commands implements Listener
 				{
 					commandSave(player);
 				}
-				else
+				else if (args[0].equalsIgnoreCase("help")) {
+					commandList(player);
+				}
+				return true;
+			}
+			else if (args.length == 2)
+			{
+				if (args[0].equalsIgnoreCase("unban"))
 				{
-					//well
+					commandUnban(player, args);
 				}
 				return true;
 			}

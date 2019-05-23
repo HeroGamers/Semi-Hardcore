@@ -4,9 +4,11 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -69,7 +71,56 @@ public class PlayerManager
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", false);
 	}
 	
+	public void unbanPlayer(Player player, String bannedPlayer) {
+		Map<String, Object> deadPlayers = this.semihardcoreConfig.getValues(true);
+		UUID unbanPlayerId = null;
+		for (Map.Entry<String, Object> entry : deadPlayers.entrySet()) {
+			if (entry.getValue() instanceof String) {
+				this.plugin.logDebug("Entry key: " + entry.getKey());
+				this.plugin.logDebug("Entry value: " + entry.getValue());
+				if (entry.getKey().contains(".Name")) {
+					if (entry.getValue().toString().equalsIgnoreCase(bannedPlayer)) {
+						unbanPlayerId = UUID.fromString(entry.getKey().replace(".Name", ""));
+						break;
+					}
+				}
+		    }
+		}
+		
+		if (unbanPlayerId == null) {
+			if (player == null) {
+	 			this.plugin.log(this.plugin.getDescription().getFullName() + ": Error unbanning player: Player doesn't exist in dead-players.yml!");
+	 		}
+	 		else {
+	 			player.sendMessage(ChatColor.YELLOW + this.plugin.getDescription().getFullName() + ": " + ChatColor.RED + "Error unbanning player: " + ChatColor.WHITE + "Player doesn't exist in dead-players.yml!");
+	 		}
+			return;
+		}
+		
+	 	if (!SemiHardcore.getPlayerManager().isBanned(unbanPlayerId)) {
+	 		if (player == null) {
+	 			this.plugin.log(this.plugin.getDescription().getFullName() + ": Error unbanning player: Player is not banned!");
+	 		}
+	 		else {
+	 			player.sendMessage(ChatColor.YELLOW + this.plugin.getDescription().getFullName() + ": " + ChatColor.RED + "Error unbanning player: " + ChatColor.WHITE + "Player is not banned!");
+	 		}
+			return;
+		}
+		
+		SemiHardcore.getPlayerManager().unbanPlayer(unbanPlayerId);
+		if (player == null) {
+			this.plugin.log(this.plugin.getDescription().getFullName() + ": Unbanned " + bannedPlayer + "!");
+		}
+		else {
+			player.sendMessage(ChatColor.YELLOW + this.plugin.getDescription().getFullName() + ": " + ChatColor.WHITE + "Unbanned " + bannedPlayer + "!");
+		}
+	}
+	
 	public boolean isDead(UUID playerId) {
+		return this.semihardcoreConfig.getBoolean(playerId.toString() + ".IsDead");
+	}
+	
+	public boolean isBanned(UUID playerId) {
 		return this.semihardcoreConfig.getBoolean(playerId.toString() + ".IsDead");
 	}
 	
@@ -84,7 +135,7 @@ public class PlayerManager
 		return false;
 	}
 	
-	public long timeDiff(UUID playerId) {
+	private long timeDiff(UUID playerId) {
 		Date deathTime = new Date();
 		Date currentTime = new Date();
 		
@@ -110,10 +161,7 @@ public class PlayerManager
 	
 	public boolean banPlayer(Player player, UUID playerId)
 	{
-		Boolean banned = this.semihardcoreConfig.getBoolean(playerId.toString() + ".IsDead");
-		
-		if (banned == true)
-		{
+		if (isBanned(playerId)) {
 			plugin.log("Tried to ban a killed player that is already banned... UUID: " + playerId.toString());
 			return false;
 		}
@@ -129,6 +177,8 @@ public class PlayerManager
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", true);
 		player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBan.toString() + " hours!");
+		
+		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
 		
 		return true;
 	}

@@ -20,12 +20,20 @@ permissions:
             semihardcore.reload: true
             semihardcore.save: true
             semihardcore.exempt: true
+            semihardcore.unban: true
+            semihardcore.help: true
     semihardcore.reload:
         description: Player can reload the Semi-Hardcore configs
         default: false
     semihardcore.save:
         description: Player can save the Semi-Hardcore configs
         default: false
+    semihardcore.unban:
+        description: Player can unban banned players
+        default: false
     semihardcore.exempt:
         description: Player doesn't get temp-banned
         default: false
+    semihardcore.help:
+        description: Player can get help about commands
+        default: true

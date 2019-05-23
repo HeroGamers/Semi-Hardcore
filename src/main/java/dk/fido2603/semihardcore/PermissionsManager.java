@@ -11,7 +11,7 @@ public class PermissionsManager
 	private String				pluginName			= "null";
 	private SemiHardcore		plugin;
 	private Permission			vaultPermission		= null;
-    private static Chat 		vaultChat 			= null;
+    private Chat 				vaultChat 			= null;
 
 	public PermissionsManager(SemiHardcore p)
 	{
