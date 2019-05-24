@@ -120,14 +120,14 @@ public class SemiHardcore extends JavaPlugin
 
 	public void log(String message)
 	{
-		console.sendMessage("[" + getDescription().getFullName() + "] " + message);
+		plugin.getLogger().info(message);
 	}
 
 	public void logDebug(String message)
 	{
 		if (this.debug)
 		{
-			Logger.getLogger("minecraft").info("[" + getDescription().getFullName() + "] " + message);
+			plugin.getLogger().info(message);
 		}
 	}
 

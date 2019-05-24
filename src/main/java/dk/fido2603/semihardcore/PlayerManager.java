@@ -19,6 +19,7 @@ public class PlayerManager
 
 	private FileConfiguration			semihardcoreConfig				= null;
 	private File						semihardcoreConfigFile			= null;
+	private long						lastSaveTime					= 0L;
 	private String						datePattern						= "HH:mm:ss dd-MM-yyyy";
 	
 	PlayerManager(SemiHardcore plugin)
@@ -39,6 +40,7 @@ public class PlayerManager
 
 	public void save()
 	{
+		this.lastSaveTime = System.currentTimeMillis();
 		if ((this.semihardcoreConfig == null) || (this.semihardcoreConfigFile == null))
 		{
 			return;
@@ -51,6 +53,16 @@ public class PlayerManager
 		{
 			this.plugin.log("Could not save config to " + this.semihardcoreConfigFile + ": " + ex.getMessage());
 		}
+	}
+
+	public void saveTimed()
+	{
+		if (System.currentTimeMillis() - this.lastSaveTime < 180000L)
+		{
+			return;
+		}
+		
+		save();
 	}
 	
 	public void newPlayerCheck(Player player)
@@ -65,10 +77,14 @@ public class PlayerManager
 			return;
 		}
 		unbanPlayer(playerId);
+
+		saveTimed();
 	}
 	
 	public void unbanPlayer(UUID playerId) {
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", false);
+
+		saveTimed();
 	}
 	
 	public void unbanPlayer(Player player, String bannedPlayer) {
@@ -177,6 +193,8 @@ public class PlayerManager
 		player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBan.toString() + " hours!");
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
+
+		saveTimed();
 		
 		return true;
 	}
