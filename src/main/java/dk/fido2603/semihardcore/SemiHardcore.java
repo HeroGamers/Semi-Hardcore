@@ -1,12 +1,10 @@
 package dk.fido2603.semihardcore;
 
 import dk.fido2603.semihardcore.listeners.PlayerListener;
-import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -29,8 +27,6 @@ public class SemiHardcore extends JavaPlugin
 	public String								serverName								= "Your Server";
 	
 	private static SemiHardcore					plugin;
-	
-	private ConsoleCommandSender console;
 
 	public static PermissionsManager getPermissionsManager()
 	{
@@ -76,7 +72,6 @@ public class SemiHardcore extends JavaPlugin
 		config = getConfig();
 
 		this.commands = new Commands(this);
-		this.console = server.getConsoleSender();
 
 		pluginEnabled = true;
 
