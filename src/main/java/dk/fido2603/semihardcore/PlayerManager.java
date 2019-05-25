@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -190,7 +189,13 @@ public class PlayerManager
 		this.semihardcoreConfig.set(playerId.toString() + ".LastDeath", sdf.format(currentTime));
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", true);
-		player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBan.toString() + " hours!");
+		
+		// Delay the kick, to not have the console make a "Removing entity while ticking!" Exception
+		SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+			public void run() {
+				player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBan.toString() + " hours!");
+			}
+		}, 1L);
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
 
