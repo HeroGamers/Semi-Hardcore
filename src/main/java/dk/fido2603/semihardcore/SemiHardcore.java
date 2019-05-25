@@ -24,7 +24,6 @@ public class SemiHardcore extends JavaPlugin
 	
 	private static Economy						economy									= null;
 	private Commands							commands								= null;
-	public String								serverName								= "Your Server";
 	
 	private static SemiHardcore					plugin;
 
@@ -138,14 +137,12 @@ public class SemiHardcore extends JavaPlugin
 	{
 		config = getConfig();
 
-		this.serverName = config.getString("Settings.ServerName", "Your Server");
 		this.debug = config.getBoolean("Settings.Debug", false);
 		this.timeToBan = config.getInt("Settings.TimeToBan", 24);
 	}
 
 	public void saveSettings()
 	{
-		config.set("Settings.ServerName", this.serverName);
 		config.set("Settings.Debug", Boolean.valueOf(this.debug));
 		config.set("Settings.TimeToBan", this.timeToBan);
 
