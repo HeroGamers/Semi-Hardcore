@@ -5,6 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import dk.fido2603.semihardcore.SemiHardcore;
 
@@ -41,5 +42,15 @@ public class PlayerListener implements Listener
 			return;
 		}
 		plugin.logDebug("Player had op or exempt...");
+	}
+	
+	@EventHandler()
+	public void onPlayerLeave(PlayerQuitEvent event)
+	{
+		if (SemiHardcore.getPlayerManager().isBanned(event.getPlayer().getUniqueId())) {
+			event.setQuitMessage("");
+			plugin.logDebug("tried to remove leave message...");
+			return;
+		}
 	}
 }
