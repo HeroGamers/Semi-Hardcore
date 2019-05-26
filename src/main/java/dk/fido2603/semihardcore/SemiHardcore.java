@@ -19,7 +19,7 @@ public class SemiHardcore extends JavaPlugin
 	public boolean								debug									= false;
 	private String 								timeToBanString							= "24h";
 	public String 								timeToBanStringUF						= "24 hours";
-	public long									timeToBan								= 0L;
+	public long									timeToBan								= 0;
 	private static FileConfiguration			config									= null;
 	private static PlayerManager				playerManager							= null;
 	private static PermissionsManager			permissionsManager						= null;

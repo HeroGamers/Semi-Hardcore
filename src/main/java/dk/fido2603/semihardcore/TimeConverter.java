@@ -26,8 +26,8 @@ public class TimeConverter
 	    case 'h' : return value * 1000*60*60;         
 	    case 'm' : return value * 1000*60;
 	    case 's' : return value * 1000;
+	    default: return value * 0;
 	  }
-	  return 0;
 	}
 	
 	// Self-made from here
