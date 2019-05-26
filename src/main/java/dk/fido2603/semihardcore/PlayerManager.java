@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -72,7 +71,7 @@ public class PlayerManager
 			return;
 		}
 		if (!shouldPlayerBeUnbanned(playerId)) {
-			player.kickPlayer("You still have time left on your death cooldown: " + (plugin.timeToBan-timeDiff(playerId)) + " hours!");
+			player.kickPlayer("You still have time left on your death cooldown: " + TimeConverter.parseMillisToUFString(plugin.timeToBan-timeDiff(playerId)) + "!");
 			return;
 		}
 		unbanPlayer(playerId);
@@ -164,10 +163,10 @@ public class PlayerManager
 			return 0;
 		}  
 		
-		long diffInMillis = Math.abs(currentTime.getTime() - deathTime.getTime());
-	    long diff = TimeUnit.HOURS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+		long diff = Math.abs(currentTime.getTime() - deathTime.getTime());
+	    //long diff = TimeUnit.HOURS.convert(diffInMillis, TimeUnit.MILLISECONDS);
 	    
-	    plugin.logDebug("Diff in hours: " + diff);
+	    plugin.logDebug("Diff in milliseconds: " + diff);
 	    
 	    return diff;
 	}
@@ -193,7 +192,7 @@ public class PlayerManager
 		// Delay the kick, to not have the console make a "Removing entity while ticking!" Exception
 		SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
-				player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBan.toString() + " hours!");
+				player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBanStringUF + "!");
 			}
 		}, 1L);
 		

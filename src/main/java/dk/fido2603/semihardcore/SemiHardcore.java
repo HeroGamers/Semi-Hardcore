@@ -17,7 +17,9 @@ public class SemiHardcore extends JavaPlugin
 	public boolean								vaultEnabled							= false;
 	public static Server						server									= null;
 	public boolean								debug									= false;
-	public Integer 								timeToBan								= 24;
+	private String 								timeToBanString							= "24h";
+	public String 								timeToBanStringUF						= "24 hours";
+	public long									timeToBan								= 0L;
 	private static FileConfiguration			config									= null;
 	private static PlayerManager				playerManager							= null;
 	private static PermissionsManager			permissionsManager						= null;
@@ -138,13 +140,18 @@ public class SemiHardcore extends JavaPlugin
 		config = getConfig();
 
 		this.debug = config.getBoolean("Settings.Debug", false);
-		this.timeToBan = config.getInt("Settings.TimeToBan", 24);
+		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
+		
+		this.timeToBan = TimeConverter.parseStringToMillis(timeToBanString);
+		
+		this.timeToBanStringUF = TimeConverter.parseMillisToUFString(timeToBan);
+		
 	}
 
 	public void saveSettings()
 	{
 		config.set("Settings.Debug", Boolean.valueOf(this.debug));
-		config.set("Settings.TimeToBan", this.timeToBan);
+		config.set("Settings.TimeToBan", this.timeToBanString);
 
 		saveConfig();
 	}
