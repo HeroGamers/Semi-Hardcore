@@ -2,9 +2,12 @@ package dk.fido2603.semihardcore;
 
 import dk.fido2603.semihardcore.listeners.PlayerListener;
 import net.milkbowl.vault.economy.Economy;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -15,6 +18,9 @@ public class SemiHardcore extends JavaPlugin
 {
 	public static boolean						pluginEnabled							= false;
 	public boolean								vaultEnabled							= false;
+	public boolean								uhcDayEnabled							= true;
+	public Integer								uhcDay									= 2;
+	public boolean								isUHCDay								= false;
 	public static Server						server									= null;
 	public boolean								debug									= false;
 	private String 								timeToBanString							= "24h";
@@ -28,6 +34,7 @@ public class SemiHardcore extends JavaPlugin
 	private Commands							commands								= null;
 	
 	private static SemiHardcore					plugin;
+	private ConsoleCommandSender 				console;
 
 	public static PermissionsManager getPermissionsManager()
 	{
@@ -42,6 +49,14 @@ public class SemiHardcore extends JavaPlugin
 	public static Economy getEconomy()
 	{
 		return economy;
+	}
+	
+	public void sendInfoAll(String message) {
+		String translatedMessage = ChatColor.translateAlternateColorCodes('&', message);
+		for (Player player : plugin.getServer().getOnlinePlayers())
+		{
+			player.sendMessage(translatedMessage);
+		}
 	}
 
 	public void sendInfo(Player player, String message)
@@ -60,6 +75,16 @@ public class SemiHardcore extends JavaPlugin
 	{
 		saveSettings();
 		reloadSettings();
+		
+		if (this.uhcDayEnabled) {
+			logDebug("Checking to turn off UHC");
+			
+			if (isUHCDay) {
+				getServer().dispatchCommand(console, "gamerule naturalRegeneration true");
+				isUHCDay = false;
+				log("Turned off UHC!");
+			}
+		}
 
 		pluginEnabled = false;
 	}
@@ -72,6 +97,7 @@ public class SemiHardcore extends JavaPlugin
 		server = getServer();
 		config = getConfig();
 
+		this.console = server.getConsoleSender();
 		this.commands = new Commands(this);
 
 		pluginEnabled = true;
@@ -97,7 +123,7 @@ public class SemiHardcore extends JavaPlugin
 			}
 			else
 			{
-				plugin.log("Vault not found.");
+				log("Vault not found.");
 			}
 		}
 		else
@@ -109,6 +135,33 @@ public class SemiHardcore extends JavaPlugin
 
 		loadSettings();
 		saveSettings();
+		
+		if (this.uhcDayEnabled) {
+			logDebug("UHC Day is enabled... checking");
+			logDebug("Current day of week: " + TimeConverter.getDayOfWeek() + ". UHC Day: " + uhcDay);
+			
+			// now let's check every half minute, if it's UHC day
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+			{
+				public void run()
+				{
+					if (TimeConverter.getDayOfWeek() == uhcDay && !isUHCDay) {
+						log("It's time for UHC day, switching the gamerule");
+						logDebug("Day: " + TimeConverter.getDayOfWeek() + " - UHCDay: " + plugin.uhcDay.toString());
+						getServer().dispatchCommand(console, "gamerule naturalRegeneration false");
+						isUHCDay = true;
+						sendInfoAll("&6It is now UHC day! Take care, no more natural regen!");
+					}
+					else if (!(TimeConverter.getDayOfWeek() == uhcDay) && isUHCDay) {
+						log("It's not UHC day anymore, switching the gamerule...");
+						logDebug("Day: " + TimeConverter.getDayOfWeek() + " - UHCDay: " + plugin.uhcDay.toString());
+						getServer().dispatchCommand(console, "gamerule naturalRegeneration true");
+						isUHCDay = false;
+						sendInfoAll("&6It is no longer UHC day!");
+					}
+				}
+			}, 20L, 600L); // 1200 is the ideal number of ticks for a minute, so we'll check each half minute - waiting about a second for the first check though, to get the things started
+		}
 
 		permissionsManager.load();
 		playerManager.load();
@@ -141,6 +194,8 @@ public class SemiHardcore extends JavaPlugin
 
 		this.debug = config.getBoolean("Settings.Debug", false);
 		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
+		this.uhcDayEnabled = config.getBoolean("Settings.UHCDayEnabled", true);
+		this.uhcDay = config.getInt("Settings.UHCDay", 2);
 		
 		this.timeToBan = TimeConverter.parseStringToMillis(timeToBanString);
 		
@@ -152,6 +207,8 @@ public class SemiHardcore extends JavaPlugin
 	{
 		config.set("Settings.Debug", Boolean.valueOf(this.debug));
 		config.set("Settings.TimeToBan", this.timeToBanString);
+		config.set("Settings.UHCDayEnabled", Boolean.valueOf(this.uhcDayEnabled));
+		config.set("Settings.UHCDay", this.uhcDay);
 
 		saveConfig();
 	}

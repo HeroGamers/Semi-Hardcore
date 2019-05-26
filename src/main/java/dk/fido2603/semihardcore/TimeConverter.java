@@ -1,5 +1,7 @@
 package dk.fido2603.semihardcore;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class TimeConverter
@@ -85,6 +87,13 @@ public class TimeConverter
 		}
 		// Send the return string
 		return String.format("%d %s", banMinutes, m);
+	}
+	
+	public static Integer getDayOfWeek() {
+		Calendar calendar = Calendar.getInstance();
+		Date currentTime = new Date();
+		calendar.setTime(currentTime);
+		return calendar.get(Calendar.DAY_OF_WEEK);
 	}
 	
 }

@@ -25,7 +25,7 @@ public class PlayerListener implements Listener
 		{
 			return;
 		}
-		if (!event.getPlayer().isOp() || (!SemiHardcore.getPermissionsManager().hasPermission(event.getPlayer(), "semihardcore.exempt"))) {
+		if (!event.getPlayer().isOp() && (!SemiHardcore.getPermissionsManager().hasPermission(event.getPlayer(), "semihardcore.exempt"))) {
 			plugin.logDebug("No op or exempt, checking player");
 			SemiHardcore.getPlayerManager().newPlayerCheck(event.getPlayer());
 			return;
@@ -36,7 +36,7 @@ public class PlayerListener implements Listener
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerDeath(PlayerDeathEvent event)
 	{
-		if (!event.getEntity().isOp() || (!SemiHardcore.getPermissionsManager().hasPermission(event.getEntity(), "semihardcore.exempt"))) {
+		if (!event.getEntity().isOp() && (!SemiHardcore.getPermissionsManager().hasPermission(event.getEntity(), "semihardcore.exempt"))) {
 			plugin.logDebug("No op or exempt, banning player");
 			SemiHardcore.getPlayerManager().banPlayer(event.getEntity(), event.getEntity().getUniqueId());
 			return;
