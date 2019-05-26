@@ -35,23 +35,56 @@ public class TimeConverter
 		long banDays = TimeUnit.MILLISECONDS.toDays(millis);
 		long banHours = TimeUnit.MILLISECONDS.toHours(millis);
 		long banMinutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+		String d = "days";
+		String h = "hours";
+		String m = "minutes";
 		
 		if (banDays > 0) {
-			if ((banHours - TimeUnit.DAYS.toHours(banDays)) > 0) {
-				if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) > 0) {
-					return String.format("%d days, %d hours and %d minutes", banDays, banHours - TimeUnit.DAYS.toHours(banDays), banMinutes - TimeUnit.HOURS.toMinutes(banHours));
-				}
-				return String.format("%d days, %d hours", banDays, banHours - TimeUnit.DAYS.toHours(banDays));
+			// For the grammar <3
+			if (banDays == 1) {
+				d = "day";
 			}
-			return String.format("%d days", banDays);
+			if ((banHours - TimeUnit.DAYS.toHours(banDays)) > 0) {
+				// For the grammar <3
+				if ((banHours - TimeUnit.DAYS.toHours(banDays)) == 1) {
+					h = "hour";
+				}
+				if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) > 0) {
+					// For the grammar <3
+					if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) == 1) {
+						m = "minute";
+					}
+					// Send the return string
+					return String.format("%d %s, %d %s and %d %s", banDays, d, banHours - TimeUnit.DAYS.toHours(banDays), h, banMinutes - TimeUnit.HOURS.toMinutes(banHours), m);
+				}
+				// Send the return string
+				return String.format("%d %s, %d %s", banDays, d, banHours - TimeUnit.DAYS.toHours(banDays), h);
+			}
+			// Send the return string
+			return String.format("%d %s", banDays, d);
 		}
 		if (banHours > 0) {
-			if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) > 0) {
-				return String.format("%d hours and %d minutes", banHours, banMinutes - TimeUnit.HOURS.toMinutes(banHours));
+			// For the grammar <3
+			if ((banHours - TimeUnit.DAYS.toHours(banDays)) == 1) {
+				h = "hour";
 			}
-			return String.format("%d hours", banHours);
+			if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) > 0) {
+				// For the grammar <3
+				if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) == 1) {
+					m = "minute";
+				}
+				// Send the return string
+				return String.format("%d %s and %d %s", banHours, h, banMinutes - TimeUnit.HOURS.toMinutes(banHours), m);
+			}
+			// Send the return string
+			return String.format("%d %s", banHours, h);
 		}
-		return String.format("%d minutes", banMinutes);
+		// For the grammar <3
+		if ((banMinutes - TimeUnit.HOURS.toMinutes(banHours)) == 1) {
+			m = "minute";
+		}
+		// Send the return string
+		return String.format("%d %s", banMinutes, m);
 	}
 	
 }
