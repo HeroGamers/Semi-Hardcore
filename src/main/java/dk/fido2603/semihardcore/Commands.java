@@ -55,6 +55,10 @@ public class Commands implements Listener
 		sender.sendMessage(ChatColor.YELLOW + "---------------- " + plugin.getDescription().getFullName() + " ----------------");
 		sender.sendMessage(ChatColor.AQUA + "Made by Fido2603");
 		sender.sendMessage(ChatColor.AQUA + "");
+		if (plugin.isUHCDay) {
+			sender.sendMessage(ChatColor.AQUA + "It is currently UHC Day! No natural regeneration!");
+			sender.sendMessage(ChatColor.AQUA + "");
+		}
 		sender.sendMessage(ChatColor.AQUA + "Use " + ChatColor.WHITE + "/semihardcore help" + ChatColor.AQUA + ", to get a list of available commands.");
 
 		return true;
