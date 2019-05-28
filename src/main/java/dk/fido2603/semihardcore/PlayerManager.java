@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class PlayerManager
 {
@@ -63,20 +64,27 @@ public class PlayerManager
 		save();
 	}
 	
-	public void newPlayerCheck(Player player)
+	public void newPlayerCheck(PlayerJoinEvent event)
 	{
+		Player player = event.getPlayer();
 		UUID playerId = player.getUniqueId();
 		
 		if (!isDead(playerId)) {
 			return;
 		}
 		if (!shouldPlayerBeUnbanned(playerId)) {
-			player.kickPlayer("You still have time left on your death cooldown: " + TimeConverter.parseMillisToUFString(plugin.timeToBan-timeDiff(playerId)) + "!");
+			// Remove join message
+			event.setJoinMessage("");
+			// Delay the kick, to make sure the player is gone...
+			SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				public void run() {
+					player.kickPlayer("You still have time left on your death cooldown: " + TimeConverter.parseMillisToUFString(plugin.timeToBan-timeDiff(playerId)) + "!");
+				}
+			}, 20L);
+			plugin.logDebug("Tried to keep player, " + player.getName() +", away from joining, as they are banned!");
 			return;
 		}
 		unbanPlayer(playerId);
-
-		saveTimed();
 	}
 	
 	public void unbanPlayer(UUID playerId) {
@@ -197,6 +205,8 @@ public class PlayerManager
 		}, 1L);
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
+		
+		plugin.sendInfoAll("&c" + player.getName() + " has been banned for &4" + plugin.timeToBanStringUF + "&c!");
 
 		saveTimed();
 		

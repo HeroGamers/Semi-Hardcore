@@ -27,7 +27,7 @@ public class PlayerListener implements Listener
 		}
 		if (!event.getPlayer().isOp() && (!SemiHardcore.getPermissionsManager().hasPermission(event.getPlayer(), "semihardcore.exempt"))) {
 			plugin.logDebug("No op or exempt, checking player");
-			SemiHardcore.getPlayerManager().newPlayerCheck(event.getPlayer());
+			SemiHardcore.getPlayerManager().newPlayerCheck(event);
 			return;
 		}
 		plugin.logDebug("Player had op or exempt...");
