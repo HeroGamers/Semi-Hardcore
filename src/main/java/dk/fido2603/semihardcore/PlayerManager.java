@@ -78,7 +78,8 @@ public class PlayerManager
 			// Delay the kick, to make sure the player is gone...
 			SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				public void run() {
-					player.kickPlayer("You still have time left on your death cooldown: " + TimeConverter.parseMillisToUFString(plugin.timeToBan-timeDiff(playerId)) + "!");
+					String kickMessage = plugin.messageKickPlayerTimeLeft.replace("{timeLeft}", TimeConverter.parseMillisToUFString(plugin.timeToBan-timeDiff(playerId)));
+					player.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 				}
 			}, 20L);
 			plugin.logDebug("Tried to keep player, " + player.getName() +", away from joining, as they are banned!");
@@ -200,13 +201,15 @@ public class PlayerManager
 		// Delay the kick, to not have the console make a "Removing entity while ticking!" Exception
 		SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
-				player.kickPlayer("You have been set on a cooldown for: " + plugin.timeToBanStringUF + "!");
+				String kickMessage = plugin.messageKickPlayerOnBan.replace("{banTime}",plugin.timeToBanStringUF);
+				player.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 			}
 		}, 1L);
 		
 		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
 		
-		plugin.sendInfoAll("&c" + player.getName() + " has been banned for &4" + plugin.timeToBanStringUF + "&c!");
+		String banMessage = plugin.messageBanPlayer.replace("{playerName}", player.getName()).replace("{timeBanned}", plugin.timeToBanStringUF);
+		plugin.sendInfoAll(banMessage);
 
 		saveTimed();
 		
