@@ -95,18 +95,7 @@ public class PlayerManager
 	}
 	
 	public void unbanPlayer(Player player, String bannedPlayer) {
-		Map<String, Object> deadPlayers = this.semihardcoreConfig.getValues(true);
-		UUID unbanPlayerId = null;
-		for (Map.Entry<String, Object> entry : deadPlayers.entrySet()) {
-			if (entry.getValue() instanceof String) {
-				this.plugin.logDebug("Entry key: " + entry.getKey());
-				this.plugin.logDebug("Entry value: " + entry.getValue());
-				if (entry.getKey().contains(".Name") && entry.getValue().toString().equalsIgnoreCase(bannedPlayer)) {
-					unbanPlayerId = UUID.fromString(entry.getKey().replace(".Name", ""));
-					break;
-				}
-		    }
-		}
+		UUID unbanPlayerId = getUUID(bannedPlayer);
 		
 		if (unbanPlayerId == null) {
 			if (player == null) {
@@ -118,7 +107,7 @@ public class PlayerManager
 			return;
 		}
 		
-	 	if (!SemiHardcore.getPlayerManager().isBanned(unbanPlayerId)) {
+	 	if (!isBanned(unbanPlayerId)) {
 	 		if (player == null) {
 	 			this.plugin.log(this.plugin.getDescription().getFullName() + ": Error unbanning player: Player is not banned!");
 	 		}
@@ -128,7 +117,8 @@ public class PlayerManager
 			return;
 		}
 		
-		SemiHardcore.getPlayerManager().unbanPlayer(unbanPlayerId);
+		unbanPlayer(unbanPlayerId);
+		
 		if (player == null) {
 			this.plugin.log(this.plugin.getDescription().getFullName() + ": Unbanned " + bannedPlayer + "!");
 		}
@@ -139,6 +129,18 @@ public class PlayerManager
 	
 	public boolean isDead(UUID playerId) {
 		return this.semihardcoreConfig.getBoolean(playerId.toString() + ".IsDead");
+	}
+	
+	public String getDeathTime(UUID playerId) {
+		return this.semihardcoreConfig.getString(playerId.toString() + ".LastDeath");
+	}
+	
+	public String getTimeSinceDeathTime(UUID playerId) {
+		return TimeConverter.parseMillisToUFString(timeDiff(playerId));
+	}
+	
+	public String getDeaths(UUID playerId) {
+		return this.semihardcoreConfig.getString(playerId.toString() + ".Deaths");
 	}
 	
 	public boolean isBanned(UUID playerId) {
@@ -160,7 +162,7 @@ public class PlayerManager
 		Date deathTime = new Date();
 		Date currentTime = new Date();
 		
-		String deathTimeStr = this.semihardcoreConfig.getString(playerId.toString() + ".LastDeath");
+		String deathTimeStr = getDeathTime(playerId);
 		
 		try 
 		{
@@ -214,5 +216,26 @@ public class PlayerManager
 		saveTimed();
 		
 		return true;
+	}
+	
+	public UUID getUUID(String playerName) {
+		Map<String, Object> deadPlayers = this.semihardcoreConfig.getValues(true);
+		UUID playerId = null;
+		for (Map.Entry<String, Object> entry : deadPlayers.entrySet()) {
+			if (entry.getValue() instanceof String) {
+				this.plugin.logDebug("Entry key: " + entry.getKey());
+				this.plugin.logDebug("Entry value: " + entry.getValue());
+				if (entry.getKey().contains(".Name") && entry.getValue().toString().equalsIgnoreCase(playerName)) {
+					playerId = UUID.fromString(entry.getKey().replace(".Name", ""));
+					break;
+				}
+		    }
+		}
+		
+		if (playerId == null) {
+	 		this.plugin.logDebug("Error finding player: Player doesn't exist in dead-players.yml!");
+		}
+		
+		return playerId;
 	}
 }

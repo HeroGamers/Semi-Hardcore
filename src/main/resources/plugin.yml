@@ -22,6 +22,7 @@ permissions:
             semihardcore.exempt: true
             semihardcore.unban: true
             semihardcore.help: true
+            semihardcore.info: true
     semihardcore.reload:
         description: Player can reload the Semi-Hardcore configs
         default: false
@@ -36,4 +37,7 @@ permissions:
         default: false
     semihardcore.help:
         description: Player can get help about commands
+        default: true
+    semihardcore.info:
+        description: Player can get info about another players death(s)
         default: true
