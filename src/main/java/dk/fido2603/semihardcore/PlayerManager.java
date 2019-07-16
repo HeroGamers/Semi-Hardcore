@@ -56,6 +56,11 @@ public class PlayerManager
 
 	public void saveTimed()
 	{
+		if (plugin.instantSave) {
+			save();
+			return;
+		}
+
 		if (System.currentTimeMillis() - this.lastSaveTime < 180000L)
 		{
 			return;

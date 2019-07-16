@@ -36,6 +36,7 @@ public class SemiHardcore extends JavaPlugin
 	
 	public static Server						server									= null;
 	public boolean								debug									= false;
+	public boolean								instantSave								= false;
 	private String 								timeToBanString							= "24h";
 	public String 								timeToBanStringUF						= "24 hours";
 	public long									timeToBan								= 0;
@@ -220,6 +221,7 @@ public class SemiHardcore extends JavaPlugin
 		config = getConfig();
 
 		this.debug = config.getBoolean("Settings.Debug", false);
+		this.instantSave = config.getBoolean("Settings.InstantSave", false);
 		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
 		
 		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
@@ -244,6 +246,7 @@ public class SemiHardcore extends JavaPlugin
 	public void saveSettings()
 	{
 		config.set("Settings.Debug", Boolean.valueOf(this.debug));
+		config.set("Settings.InstantSave", Boolean.valueOf(this.instantSave));
 		config.set("Settings.TimeToBan", this.timeToBanString);
 		
 		config.set("Misc.UHCDayEnabled", Boolean.valueOf(this.uhcDayEnabled));
