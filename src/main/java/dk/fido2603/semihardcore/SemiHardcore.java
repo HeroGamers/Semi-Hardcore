@@ -124,7 +124,6 @@ public class SemiHardcore extends JavaPlugin
 
 		pluginEnabled = true;
 
-		permissionsManager = new PermissionsManager(this);
 		playerManager = new PlayerManager(this);
 		playerListener = new PlayerListener(this);
 		
@@ -152,6 +151,8 @@ public class SemiHardcore extends JavaPlugin
 		{
 			log("Vault not found.");
 		}
+
+		permissionsManager = new PermissionsManager(this);
 		
 		getServer().getPluginManager().registerEvents(playerListener, this);
 
@@ -263,6 +264,7 @@ public class SemiHardcore extends JavaPlugin
 		config.set("Messages.EndUHCDay", this.messageEndUHCDay);
 
 		saveConfig();
+		getPlayerManager().save();
 	}
 
 	@Override
