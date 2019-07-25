@@ -205,7 +205,7 @@ public class SemiHardcore extends JavaPlugin
 	{
 		if (this.debug)
 		{
-			plugin.getLogger().info(message);
+			plugin.getLogger().info("[Debug] " + message);
 		}
 	}
 
@@ -227,7 +227,7 @@ public class SemiHardcore extends JavaPlugin
 		
 		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
 		this.uhcDay = config.getInt("Misc.UHCDay", 2);
-		this.uhcDayEnabled = config.getBoolean("Misc.PlaySounds", true);
+		this.playSoundEnabled = config.getBoolean("Misc.PlaySounds", true);
 		this.uhcStartSound = config.getString("Misc.Sound_UHCStart", "entity.ender_dragon.growl");
 		this.uhcEndSound = config.getString("Misc.Sound_UHCEnd", "entity.wither.spawn");
 		
