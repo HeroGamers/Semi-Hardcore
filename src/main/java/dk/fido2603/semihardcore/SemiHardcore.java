@@ -33,6 +33,7 @@ public class SemiHardcore extends JavaPlugin
 	public String								messageKickPlayerTimeLeft				= "&cYou still have time left on your death cooldown: &4{timeLeft}&c!";
 	private String								messageStartUHCDay						= "&4-> &6It is now UHC day! Take care, no more natural regen! &4<-";
 	private String								messageEndUHCDay						= "&4-> &6It is no longer UHC day! &4<-";
+	public String								messageTimeTillBan						= "&4-> &6Whoops! You died! You will be banned in {time} seconds! &4<-";
 	
 	public static Server						server									= null;
 	public boolean								debug									= false;
@@ -40,6 +41,7 @@ public class SemiHardcore extends JavaPlugin
 	private String 								timeToBanString							= "24h";
 	public String 								timeToBanStringUF						= "24 hours";
 	public long									timeToBan								= 0;
+	public long									timeBeforeBan							= 0;
 	private static FileConfiguration			config									= null;
 	private static PlayerManager				playerManager							= null;
 	private static PermissionsManager			permissionsManager						= null;
@@ -224,6 +226,7 @@ public class SemiHardcore extends JavaPlugin
 		this.debug = config.getBoolean("Settings.Debug", false);
 		this.instantSave = config.getBoolean("Settings.InstantSave", false);
 		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
+		this.timeBeforeBan = config.getLong("Settings.TimeBeforeBan", 0);
 		
 		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
 		this.uhcDay = config.getInt("Misc.UHCDay", 2);
@@ -237,6 +240,7 @@ public class SemiHardcore extends JavaPlugin
 		this.messageKickPlayerTimeLeft = config.getString("Messages.PlayerTimeLeft", "&cYou still have time left on your death cooldown: &4{timeLeft}&c!");
 		this.messageStartUHCDay = config.getString("Messages.StartUHCDay", "&4-> &6It is now UHC day! Take care, no more natural regen! &4<-");
 		this.messageEndUHCDay = config.getString("Messages.EndUHCDay", "&4-> &6It is no longer UHC day! &4<-");
+		this.messageTimeTillBan = config.getString("Messages.TimeTillBan", "&4-> &6Whoops! You died! You will be banned in {time} seconds! &4<-");
 		
 		this.timeToBan = TimeConverter.parseStringToMillis(timeToBanString);
 		
@@ -249,6 +253,7 @@ public class SemiHardcore extends JavaPlugin
 		config.set("Settings.Debug", Boolean.valueOf(this.debug));
 		config.set("Settings.InstantSave", Boolean.valueOf(this.instantSave));
 		config.set("Settings.TimeToBan", this.timeToBanString);
+		config.set("Settings.TimeBeforeBan", this.timeBeforeBan);
 		
 		config.set("Misc.UHCDayEnabled", Boolean.valueOf(this.uhcDayEnabled));
 		config.set("Misc.UHCDay", this.uhcDay);
@@ -262,6 +267,7 @@ public class SemiHardcore extends JavaPlugin
 		config.set("Messages.PlayerTimeLeft", this.messageKickPlayerTimeLeft);
 		config.set("Messages.StartUHCDay", this.messageStartUHCDay);
 		config.set("Messages.EndUHCDay", this.messageEndUHCDay);
+		config.set("Messages.TimeTillBan", this.messageTimeTillBan);
 
 		saveConfig();
 		getPlayerManager().save();

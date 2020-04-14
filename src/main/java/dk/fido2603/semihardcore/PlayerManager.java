@@ -205,13 +205,20 @@ public class PlayerManager
 
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", true);
 
+		long delay = 1L;
+		if (plugin.timeBeforeBan != 0) {
+			delay = Math.abs(plugin.timeBeforeBan)*20L;
+			String timeTillBanMessage = plugin.messageTimeTillBan.replace("{time}", Long.toString(plugin.timeBeforeBan));
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', timeTillBanMessage));
+		}
+
 		// Delay the kick, to not have the console make a "Removing entity while ticking!" Exception
 		SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
 				String kickMessage = plugin.messageKickPlayerOnBan.replace("{banTime}",plugin.timeToBanStringUF);
 				player.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 			}
-		}, 1L);
+		}, delay);
 
 		this.semihardcoreConfig.set(playerId.toString() + ".Name", player.getName());
 

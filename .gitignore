@@ -1,3 +1,7 @@
+# IDEA
+.idea/
+semihardcore.iml
+
 # Libs and stuff
 /bukkit
 /lib
