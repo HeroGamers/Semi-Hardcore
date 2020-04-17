@@ -190,7 +190,7 @@ public class PlayerManager
 	public boolean banPlayer(Player player, UUID playerId)
 	{
 		if (isBanned(playerId)) {
-			plugin.log("Tried to ban a killed player that is already banned... UUID: " + playerId.toString());
+			plugin.log("Check config - Tried to ban a killed player that is already banned... UUID: " + playerId.toString());
 			return false;
 		}
 
@@ -211,10 +211,12 @@ public class PlayerManager
 			String timeTillBanMessage = plugin.messageTimeTillBan.replace("{time}", Long.toString(plugin.timeBeforeBan));
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', timeTillBanMessage));
 		}
+		plugin.logDebug("Delay before player is banned: " + delay);
 
 		// Delay the kick, to not have the console make a "Removing entity while ticking!" Exception
 		SemiHardcore.server.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			public void run() {
+				plugin.logDebug("Banning player...");
 				String kickMessage = plugin.messageKickPlayerOnBan.replace("{banTime}",plugin.timeToBanStringUF);
 				player.kickPlayer(ChatColor.translateAlternateColorCodes('&', kickMessage));
 			}

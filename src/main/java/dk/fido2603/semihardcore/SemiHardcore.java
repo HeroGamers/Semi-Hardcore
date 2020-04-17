@@ -41,7 +41,7 @@ public class SemiHardcore extends JavaPlugin
 	private String 								timeToBanString							= "24h";
 	public String 								timeToBanStringUF						= "24 hours";
 	public long									timeToBan								= 0;
-	public long									timeBeforeBan							= 0;
+	public Integer								timeBeforeBan							= 0;
 	private static FileConfiguration			config									= null;
 	private static PlayerManager				playerManager							= null;
 	private static PermissionsManager			permissionsManager						= null;
@@ -226,7 +226,7 @@ public class SemiHardcore extends JavaPlugin
 		this.debug = config.getBoolean("Settings.Debug", false);
 		this.instantSave = config.getBoolean("Settings.InstantSave", false);
 		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
-		this.timeBeforeBan = config.getLong("Settings.TimeBeforeBan", 0);
+		this.timeBeforeBan = config.getInt("Settings.TimeBeforeBan", 0);
 		
 		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
 		this.uhcDay = config.getInt("Misc.UHCDay", 2);

@@ -11,7 +11,6 @@ public class PermissionsManager
 	private String				pluginName			= "null";
 	private SemiHardcore		plugin;
 	private Permission			vaultPermission		= null;
-    private Chat 				vaultChat 			= null;
 
 	public PermissionsManager(SemiHardcore p)
 	{
@@ -19,10 +18,8 @@ public class PermissionsManager
 		
 		if (p.vaultEnabled) {
 			RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(Permission.class);
+			assert permissionProvider != null;
 			vaultPermission = permissionProvider.getProvider();
-			
-			RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(Chat.class);
-	        vaultChat = chatProvider.getProvider();
 		}
 	}
 
@@ -64,15 +61,6 @@ public class PermissionsManager
 	{
 		if (this.plugin.vaultEnabled) {
 			return vaultPermission.getPrimaryGroup(plugin.getServer().getPlayer(playerName));
-		}
-		return "";
-	}
-
-	public String getPrefix(String playerName)
-	{
-		if (this.plugin.vaultEnabled) {
-			Player player = plugin.getServer().getPlayer(playerName);
-			return vaultChat.getPlayerPrefix(player);
 		}
 		return "";
 	}
