@@ -9,6 +9,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import dk.fido2603.semihardcore.SemiHardcore;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class PlayerListener implements Listener
 {
 	private SemiHardcore	plugin	= null;
