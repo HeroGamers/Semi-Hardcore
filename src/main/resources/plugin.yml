@@ -7,7 +7,7 @@ load: POSTWORLD
 description: Die and you're banned!
 depend: []
 softdepend: [Vault]
-website: https://github.com/Fido2603/Semi-Hardcore
+website: https://github.com/HeroGamers/Semi-Hardcore
 commands:
    semihardcore:
       description: Command for the Semi-Hardcore plugin
