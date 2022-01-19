@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -206,15 +205,8 @@ public class PlayerManager
 
 		this.semihardcoreConfig.set(playerId.toString() + ".IsDead", true);
 
-		String deathLocationMessage = "";
-		if (plugin.sendDeathLocation)
-		{
-			Location pLocation = player.getLocation();
-			deathLocationMessage = plugin.messageDeathLocation.replace("{location}", "X: " + pLocation.getX() + " Y: " + pLocation.getY() + " Z: " + pLocation.getZ());
-		}
-
 		long delay = 1L;
-		if (plugin.timeBeforeBan > 0) {
+		if (plugin.timeBeforeBan != 0) {
 			delay = Math.abs(plugin.timeBeforeBan)*20L;
 			String timeTillBanMessage = plugin.messageTimeTillBan.replace("{time}", Long.toString(plugin.timeBeforeBan));
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&', timeTillBanMessage));
@@ -235,28 +227,10 @@ public class PlayerManager
 		String banMessage = plugin.messageBanPlayer.replace("{playerName}", player.getName()).replace("{timeBanned}", plugin.timeToBanStringUF);
 		plugin.sendInfoAll(banMessage);
 
-		if (plugin.sendDeathLocation)
-		{
-			plugin.sendInfoAll(deathLocationMessage);
-		}
-
 		saveTimed();
 
 		return true;
 	}
-
-	public Integer getLongestTimeAlive(UUID playerId) { return this.semihardcoreConfig.getInt(playerId.toString() + ".LongestTimeAlive"); }
-
-	public void updateLongestTimeAlive(UUID playerId, Integer time)
-	{
-		int longestTime = this.semihardcoreConfig.getInt(playerId.toString() + ".LongestTimeAlive");
-		if (time > longestTime)
-		{
-			this.semihardcoreConfig.set(playerId.toString() + ".LongestTimeAlive", time);
-		}
-	}
-
-	public Map<String, Object> getDeadPlayers() { return this.semihardcoreConfig.getValues(true); }
 
 	public UUID getUUID(String playerName) {
 		Map<String, Object> deadPlayers = this.semihardcoreConfig.getValues(true);

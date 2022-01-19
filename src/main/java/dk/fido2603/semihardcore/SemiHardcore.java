@@ -18,10 +18,7 @@ public class SemiHardcore extends JavaPlugin
 {
 	public static boolean						pluginEnabled							= false;
 	public boolean								vaultEnabled							= false;
-
-	public boolean								sendDeathLocation						= true;
-	public boolean								timeSurvivedScoreboardEnabled			= false;
-
+	
 	public boolean								uhcDayEnabled							= false;
 	public Integer								uhcDay									= 2;
 	public boolean								isUHCDay								= false;
@@ -32,7 +29,6 @@ public class SemiHardcore extends JavaPlugin
 	
 	public String								messageLoginUHCDay						= "&4-> &6It is currently UHC day! Take care, there is no natural regen!&4 <-";
 	public String								messageBanPlayer						= "&c{playerName} has been banned for &4{timeBanned}&c!";
-	public String								messageDeathLocation					= "&cThey died at &4{location}&c!";
 	public String								messageKickPlayerOnBan					= "&4You have been set on a cooldown for: &c{banTime}&4!";
 	public String								messageKickPlayerTimeLeft				= "&cYou still have time left on your death cooldown: &4{timeLeft}&c!";
 	private String								messageStartUHCDay						= "&4-> &6It is now UHC day! Take care, no more natural regen! &4<-";
@@ -231,9 +227,7 @@ public class SemiHardcore extends JavaPlugin
 		this.instantSave = config.getBoolean("Settings.InstantSave", false);
 		this.timeToBanString = config.getString("Settings.TimeToBan", "24h");
 		this.timeBeforeBan = config.getInt("Settings.TimeBeforeBan", 0);
-		this.timeSurvivedScoreboardEnabled = config.getBoolean("Settings.TimeSurvivedScoreboard", false);
-
-		this.sendDeathLocation = config.getBoolean("Misc.SendLocationOnDeath", true);
+		
 		this.uhcDayEnabled = config.getBoolean("Misc.UHCDayEnabled", false);
 		this.uhcDay = config.getInt("Misc.UHCDay", 2);
 		this.playSoundEnabled = config.getBoolean("Misc.PlaySounds", true);
@@ -242,7 +236,6 @@ public class SemiHardcore extends JavaPlugin
 		
 		this.messageLoginUHCDay = config.getString("Messages.LoginUHCDay", "&4-> &6It is currently UHC day! Take care, there is no natural regen!&4 <-");
 		this.messageBanPlayer = config.getString("Messages.BanPlayer", "&c{playerName} has been banned for &4{timeBanned}&c!");
-		this.messageDeathLocation = config.getString("Message.DeathLocation", "&cThey died at &4{location}&c!");
 		this.messageKickPlayerOnBan = config.getString("Messages.KickPlayerOnBan", "&4You have been set on a cooldown for: &c{banTime}&4!");
 		this.messageKickPlayerTimeLeft = config.getString("Messages.PlayerTimeLeft", "&cYou still have time left on your death cooldown: &4{timeLeft}&c!");
 		this.messageStartUHCDay = config.getString("Messages.StartUHCDay", "&4-> &6It is now UHC day! Take care, no more natural regen! &4<-");
@@ -261,9 +254,7 @@ public class SemiHardcore extends JavaPlugin
 		config.set("Settings.InstantSave", Boolean.valueOf(this.instantSave));
 		config.set("Settings.TimeToBan", this.timeToBanString);
 		config.set("Settings.TimeBeforeBan", this.timeBeforeBan);
-		config.set("Settings.TimeSurvivedScoreboard", Boolean.valueOf(this.timeSurvivedScoreboardEnabled));
-
-		config.set("Misc.SendLocationOnDeath", Boolean.valueOf(this.sendDeathLocation));
+		
 		config.set("Misc.UHCDayEnabled", Boolean.valueOf(this.uhcDayEnabled));
 		config.set("Misc.UHCDay", this.uhcDay);
 		config.set("Misc.PlaySounds", this.playSoundEnabled);
@@ -272,7 +263,6 @@ public class SemiHardcore extends JavaPlugin
 		
 		config.set("Messages.LoginUHCDay", this.messageLoginUHCDay);
 		config.set("Messages.BanPlayer", this.messageBanPlayer);
-		config.set("Messages.DeathLocation", this.messageDeathLocation);
 		config.set("Messages.KickPlayerOnBan", this.messageKickPlayerOnBan);
 		config.set("Messages.PlayerTimeLeft", this.messageKickPlayerTimeLeft);
 		config.set("Messages.StartUHCDay", this.messageStartUHCDay);
